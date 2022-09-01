@@ -72,6 +72,8 @@ class AuthController extends Controller
                     return array('status_code' => 200, 'message' => 'Login Successfull', 'redirect_url' => url('admin/dashboard'));
                 else if(Auth::user()->user_type == 2)
                     return array('status_code' => 200, 'message' => 'Login Successfull', 'redirect_url' => url('user/dashboard'));
+             }else{
+                return array('status_code' => 201, 'message' => 'Wrong email or password', 'redirect_url' => url('user/dashboard'));
              }
         }
     }

@@ -1,24 +1,59 @@
 @extends('auth.auth_template')
 @section('content')
-<div class="main">  	
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-12">
+          	<div class="row">
+          		<div class="col-xl-3 col-lg-4 col col-md-4 col-sm-5 m-auto pt-5 p-2">
+		            <!-- jquery validation -->
+		            <div class="card card-primary">
+		              <div class="card-header">
+		                <h3 class="card-title">Quick Example <small>jQuery Validation</small></h3>
+		              </div>
+		              <!-- /.card-header -->
+		              <!-- form start -->
+		              <form id="loginForm">
+		              	@csrf
+		                <div class="card-body">
+		                  <div class="form-group">
+		                    <label for="exampleInputEmail1">Email address</label>
+		                    <input type="email" name="email" class="form-control" placeholder="Enter email">
+		                  </div>
+		                  <div class="form-group">
+		                    <label for="exampleInputPassword1">Password</label>
+		                    <input type="password" name="password" class="form-control" placeholder="Password">
+		                  </div>
+		                  <div class="form-group mb-0">
+		                    <div class="custom-control custom-checkbox">
+		                      <input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
+		                      <label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
+		                    </div>
+		                  </div>
+		                </div>
+		                <!-- /.card-body -->
+		                <div class="card-footer">
+		                  <button type="submit" class="btn btn-primary">Submit</button>
+		                </div>
+		              </form>
+		            </div>
+		            <!-- /.card -->
+							</div>
+						</div>
+            </div>
+          <!--/.col (left) -->
+          <!-- right column -->
+          <div class="col-md-6">
 
-			<div class="signup">
-				<form id="loginForm">
-					<label for="chk" aria-hidden="true">Login</label>
-					@csrf
-					<input type="email" name="email" placeholder="Email">
-                    <span class="danger err-message" id="email"></span>
-					<input type="password" name="password" placeholder="Password">
-                    <span class="danger err-message" id="password"></span>
-					<button type="submit">Login</button>
-				</form>
-			</div>
-
-			<div class="log-sign-link-btn">
-				
-					<label for="chk" aria-hidden="true"> <a href="{{ url('register') }}">Sign Up</a> </label>
-			</div>
-	</div>
+          </div>
+          <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+	
 @endsection
 @section('externjs')
 
@@ -55,6 +90,11 @@
                         })
 	                        window.location = response.redirect_url;
 	                        
+	                    }else if(response.status_code ==201){
+	                    		Toast.fire({
+                            icon : 'error',
+                            title : response.message
+                        })
 	                    }
 	                } 
 	            });
