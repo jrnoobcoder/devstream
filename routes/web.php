@@ -27,6 +27,6 @@ Route::group(['prefix' => '/admin', 'middleware' => 'adminAuth'], function(){
 });
 
 //User Routes
-Route::group(['prefix' => '/user', 'middleware' => 'userAuth'], function(){
+Route::group([ 'middleware' => 'userAuth'], function(){
     Route::get('/dashboard',[App\Http\Controllers\User\UserController::class, 'dashboard']);
 });
