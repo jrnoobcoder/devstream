@@ -7,11 +7,15 @@
           <!-- left column -->
           <div class="col-md-12">
           	<div class="row">
-          		<div class="col-xl-3 col-lg-4 col col-md-4 col-sm-5 m-auto pt-5 p-2">
+          		<div class="col-xl-4 col-lg-5 col-md-5 col-sm-8 m-auto pt-5 p-2">
 		            <!-- jquery validation -->
 		            <div class="card card-primary">
 		              <div class="card-header">
-		                <h3 class="card-title">Quick Example <small>jQuery Validation</small></h3>
+		              	<div class="row">
+		              		<div class="col-5"><h2>Login	</h2></div>
+		              		<div class="col-7"><p class="text-right">New here? <a class="text-bold" href="{{url('register')}}">Sign Up</a><p></div>
+		              	</div>
+		                
 		              </div>
 		              <!-- /.card-header -->
 		              <!-- form start -->
@@ -21,10 +25,12 @@
 		                  <div class="form-group">
 		                    <label for="exampleInputEmail1">Email address</label>
 		                    <input type="email" name="email" class="form-control" placeholder="Enter email">
+		                    <span class="text-danger" id="email"></span>
 		                  </div>
 		                  <div class="form-group">
 		                    <label for="exampleInputPassword1">Password</label>
 		                    <input type="password" name="password" class="form-control" placeholder="Password">
+		                    <span class="text-danger" id="password"></span>
 		                  </div>
 		                  <div class="form-group mb-0">
 		                    <div class="custom-control custom-checkbox">
@@ -35,7 +41,14 @@
 		                </div>
 		                <!-- /.card-body -->
 		                <div class="card-footer">
-		                  <button type="submit" class="btn btn-primary">Submit</button>
+		                	<div class="row">
+		                		<div class="col-4">
+		                 				<button type="submit" class="btn btn-primary">Submit</button>
+		                		
+		                		</div>
+		                		<div class="col-8"><p class="text-right"><a href=""> forgot password?</a></p></div>
+		                	</div>
+		                	
 		                </div>
 		              </form>
 		            </div>
@@ -80,8 +93,8 @@
 	                    $('span').text('');
 	                    if(response.status_code == 301){
 	                        $.each(response.errors, function(key, value){
-	                            // $("#"+key).text(value[0]);
-	                            toastr.error(value[0]);
+	                            $("#"+key).text(value[0]);
+	                            //toastr.error(value[0]);
 	                        });
 	                    }else if(response.status_code == 200){
 	                        Toast.fire({

@@ -1,26 +1,74 @@
 @extends('auth.auth_template')
 @section('content')
-<div class="main">  	
-		<!-- <input type="checkbox" id="chk" aria-hidden="true"> -->
+   <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-12">
+            <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-5 col-sm-8 m-auto pt-5 p-2">
+                    <!-- jquery validation -->
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <div class="row">
+                            <div class="col"><h2>Signup  </h2></div>
+                            <div class="col"><p class="text-right"><a class="text-right" href="{{url('login')}}"> Login</a></p></div>
+                        </div>
+                      </div>
+                      <!-- /.card-header -->
+                      <!-- form start -->
+                      <form id="registerForm">
+                        @csrf
+                        <div class="card-body">
+                          <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Name">
+                            <span class="text-danger" id="name"></span>
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" name="email" class="form-control" placeholder="Email">
+                            <span class="text-danger" id="email"></span>
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password">
+                            <span class="text-danger" id="password"></span>
+                          </div>
+                          <div class="form-group mb-0">
+                            <div class="custom-control custom-checkbox">
+                              <input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
+                              <label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                          <div class="row">
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary">Submit</button>
 
-			<div class="signup">
-				<form id="quickForm">
-					<label for="chk" aria-hidden="true">Sign up</label>
-                    @csrf
-					<input type="text" name="name" placeholder="User name" >
-                    <span class="danger err-message" id="name"></span>
-					<input type="email" name="email" placeholder="Email">
-                    <span class="danger err-message" id="email"></span>
-					<input type="password" name="password" placeholder="Password">
-                    <span class="danger err-message" id="password"></span>
-					<button type="submit" >Sign up</button>
-				</form>
-			</div>
+                            </div>
+                            <div class="col-8"><p class="text-right">Existing! <a href="{{url('login')}}">Login</a></p></div>
+                            </div>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- /.card -->
+                            </div>
+                        </div>
+            </div>
+          <!--/.col (left) -->
+          <!-- right column -->
+          <div class="col-md-6">
 
-			<div class="log-sign-link-btn">
-					<label for="chk" aria-hidden="true"> <a href="{{url('login')}}"> Login </a></label>					
-			</div>
-	</div>
+          </div>
+          <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
 @endsection
 @section('externjs')
 <script>
@@ -31,7 +79,7 @@
             showConfirmButton : false,
             timer : 5000
         });
-       $('#quickForm').submit(function(e){
+       $('#registerForm').submit(function(e){
             e.preventDefault();
             let formData = new FormData(this);
             $.ajax({
@@ -44,8 +92,8 @@
                     $('span').text('');
                     if(response.status_code == 301){
                         $.each(response.errors, function(key, value){
-                            // $("#"+key).text(value[0]);
-                            toastr.error(value[0]);
+                            $("#"+key).text(value[0]);
+                            //toastr.error(value[0]);
                         });
                     }else if(response.status_code == 200){
                         Toast.fire({
