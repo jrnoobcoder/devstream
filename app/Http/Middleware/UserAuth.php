@@ -21,6 +21,7 @@ class UserAuth
             if(Auth::user() && Auth::user()->user_type == 2){
                 return $next($request);
             }
+           // abort(404);
         }else{
             return redirect('login');
         }

@@ -15,7 +15,7 @@ class AuthController extends Controller
         if(Auth::check()){
             if(Auth::user()->user_type == 1)
                 return redirect('admin/dashboard');
-            else if(Auth::user()->user_type == 0)
+            else if(Auth::user()->user_type == 2)
                 return redirect('user/dashboard');
         }
         return view('auth.login');
@@ -73,7 +73,7 @@ class AuthController extends Controller
                 else if(Auth::user()->user_type == 2)
                     return array('status_code' => 200, 'message' => 'Login Successfull', 'redirect_url' => url('user/dashboard'));
              }else{
-                return array('status_code' => 201, 'message' => 'Wrong email or password', 'redirect_url' => url('user/dashboard'));
+                return array('status_code' => 201, 'message' => 'Wrong email or password');
              }
         }
     }
@@ -82,8 +82,15 @@ class AuthController extends Controller
         if(Auth::check()){
             if(Auth::user()->user_type == 1)
                 return redirect('admin/dashboard');
-            else if(Auth::user()->user_type == 0)
+            else if(Auth::user()->user_type == 2)
                 return redirect('user/dashboard');
+        }else{
+            return redirect('/login');
         }
     }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/login');
+      }
 }
