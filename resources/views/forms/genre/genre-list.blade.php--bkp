@@ -16,7 +16,6 @@
           </div>
         </div>
       </div><!-- /.container-fluid -->
-
     </section>
 
     <!-- Main content -->
@@ -29,8 +28,7 @@
 
                 <div class="row">
 		              		<div class="col-9"><h3 class="card-title">DataTable with minimal features & hover style</h3></div>
-		              		<!-- <div class="col-3"><span class="text-right"><a href="{{route('add-genre')}}" class="btn btn-block btn-primary">add</a></span></div> -->
-		              		<div class="col-3"><span class="text-right"><button class="btn btn-block btn-primary" data-toggle="modal" data-target="#modal-default">add</button></span></div>
+		              		<div class="col-3"><span class="text-right"><a href="{{route('add-genre')}}" class="btn btn-block btn-primary">add</a></span></div>
 		              	</div>
                
               </div>
@@ -53,7 +51,7 @@
                   
                     <td>{{($d->status==1) ? "Active" : "In Active" ; }}</td>
                     <td class="gaction">
-                      <span><a class="editRecord"  data-id="{{ $d->genre_id }}"><i class="fas fa-edit"></i></a></span>&nbsp
+                      <span><a class="editRecord  " data-id="{{ $d->genre_id }}"><i class="fas fa-edit"></i></a></span>&nbsp
                       <span><a class="deleteRecord " data-id="{{ $d->genre_id }}"><i class="fas fa-trash-alt"></i></a></span>&nbsp
                      
                     </td>
@@ -81,91 +79,29 @@
         <!-- /.row -->
       </div>
       <!-- /.container-fluid -->
-      <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="formTitle">Add Genre</h4>
-              <button type="button" class="close" data-dismiss="modal" data-backdrop="static" data-keyboard="false" data-target="modal-default" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-            <div class="row">
-                    <div class="col-md-12 m-auto">
-                        <form id="genreForm">
-                        @csrf
-                          <input type="hidden" name="genre_id" value=""/>
-                          <div class="form-group">
-                            <label for="genrename">Genre Name</label>
-                            <input type="text" name="genre_name" id="genrename" class="form-control" placeholder="Name">
-                            <span class="text-danger" id="genre_name"></span>
-                          </div>
-                    
-                          <div class="form-group">
-                            <label for="genrestatus">Genre Status</label>
-                            <select name="status" id="genrestatus" class="form-control">
-                                <option value="1" >Active</option>
-                                <option value="0" >In Active</option>
-                            </select>
-                            <span class="text-danger" id="status"></span>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                                <!-- <input type="submit" class="btn btn-primary" value="Submit"/> -->
-                                <button type="submit" id="genreBtn" class="btn btn-primary ">Submit</button>
-                            </div> 
-                            </div>
-                      </form>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
+    <!-- /.content -->
+
+  <!-- /.content-wrapper -->
    
 @endsection
 @section('externaljs')
 <script>
     $(document).ready(function(){
+        Toast = Swal.mixin({
+            toast : true,
+            position : 'top-end',
+            showConfirmButton : false,
+            timer : 5000
+        });
         $(".deleteRecord").click(function(){
             var id = $(this).data("id");
             var url = "deletegenre/"+id;
             var url2 = '{{url("admin/deletegenre/")}}/'+id;
             alert(url2);
-            deleteData(id, url);
+            deleteOrEdit(id, url);
         })
-        $(".editRecord").click(function(){
-            var id = $(this).data("id");
-            var url = '{{url("admin/editgenre/")}}/'+id;
-            $("#formTitle").text("Edit Genre");
-            $("#genreBtn").text("Update");
-
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: {"genre_id":id,},
-                processData : false,
-                contentType : false,
-                success: function(response){
-                    $("#genreForm input[name='genre_id']").val("");
-                    $("#genreForm input[name='genre_name']").val("");
-                    if(response.status_code == 200){
-                      if(response.data){
-                        var data =response.data;
-                        $("#genreForm input[name='genre_id']").val(data['genre_id']);
-                        $("#genreForm input[name='genre_name']").val(data['genre_name']);
-                        $("#genreForm select[name='status']").val(data['status']);  
-                      }
-                      $('#modal-default').modal('show');
-                    }
-                } 
-            });
-        })
-
-        //$(".close").click(function)
-        function deleteData(id, url){
+        function deleteOrEdit(id, url){
           // alert(url);
           $.ajax({
                 url: url,

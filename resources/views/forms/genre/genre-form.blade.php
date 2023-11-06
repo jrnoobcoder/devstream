@@ -32,39 +32,36 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form>
-                            <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+        
+                        <form id="genreForm">
+                        @csrf
+                        <div class="card-body">
+                          <div class="form-group">
+                            <label for="genrename">Genre Name</label>
+                            <input type="text" name="genre_name" id="genrename" class="form-control" placeholder="Name">
+                            <span class="text-danger" id="genre_name"></span>
+                          </div>
+                    
+                          <div class="form-group">
+                            <label for="genrestatus">Genre Status</label>
+                            <select name="status" id="genrestatus" class="form-control">
+                                <option value="1" selected>Active</option>
+                                <option value="0" >In Active</option>
+                            </select>
+                            <span class="text-danger" id="status"></span>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                          <div class="row">
+                            <!-- <div class="col-4"> -->
+                                <!-- <input type="submit" class="btn btn-primary" value="Submit"/> -->
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <!-- </div> -->
+                            
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputFile">File input</label>
-                                <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Upload</span>
-                                </div>
-                                </div>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div>
-                            </div>
-                            <!-- /.card-body -->
-
-                            <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
+                        </div>
+                      </form>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -72,4 +69,45 @@
             </div><!-- /.container-fluid -->
         </section>
 
+@endsection
+
+@section('externaljs')
+<script>
+    $(document).ready(function(){
+        Toast = Swal.mixin({
+            toast : true,
+            position : 'top-end',
+            showConfirmButton : false,
+            timer : 5000
+        });
+       $('#genreForm').submit(function(e){
+            e.preventDefault();
+            let formData = new FormData(this);
+            $.ajax({
+                url: '{{url("admin/storegenre")}}',
+                type: "POST",
+                data: formData,
+                processData : false,
+                contentType : false,
+                success: function(response){
+                    $('span').text('');
+                    if(response.status_code == 301){
+                        $.each(response.errors, function(key, value){
+                            $("#genreForm #"+key).text(value[0]);
+                            // toastr.error(value[0]);
+                        });
+                    }else if(response.status_code == 200){
+                        Toast.fire({
+                            icon : 'success',
+                            title : response.message
+                        })
+                        window.location = response.redirect_url;
+                        
+                    }
+                } 
+            });
+        });
+    });
+    
+    </script>
 @endsection

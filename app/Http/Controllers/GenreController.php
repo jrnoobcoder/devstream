@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class GenreController extends Controller
 {
     /**
@@ -14,8 +14,10 @@ class GenreController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('forms.genre.genre-list');
+    {   
+        $data = Genre::all();
+        // print($data);die;
+        return view('forms.genre.genre-list', compact('data'));
     }
 
     /**
@@ -35,9 +37,26 @@ class GenreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeGenre(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'genre_name' => 'required',
+            'status' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return array('status_code' => 301, 'errors' => $validator->errors());
+        }else{
+            $data['genre_name'] = $request->genre_name;
+            $data['status'] = $request->status;
+            $genre = Genre::insert($data);
+            if($genre){
+                return array('status_code' => 200, 'message' => 'Added Successfull', "redirect_url" => url('admin/genre'));
+            }else{
+                return redirect('admin/add-genre')->withErrors(['err' => ['Somethinng went wrong']], 'admin/add-genre');
+            }
+        }
+
     }
 
     /**
@@ -57,9 +76,12 @@ class GenreController extends Controller
      * @param  \App\Models\Genre  $genre
      * @return \Illuminate\Http\Response
      */
-    public function edit(Genre $genre)
+    public function editGenre($genreid)
     {
-        //
+        $data = Genre::where('genre_id', $genreid)->first();
+        if($data){
+            return array('status_code' => 200, 'message' => '', "data" => $data);
+        }
     }
 
     /**
@@ -80,8 +102,14 @@ class GenreController extends Controller
      * @param  \App\Models\Genre  $genre
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Genre $genre)
+    public function deleteGenre($genreid)
     {
-        //
+        // echo "<pre>";
+        // print_r($genreid);die;
+        $genre = Genre::where('genre_id', $genreid)->delete($genreid);
+        if($genre){
+            return array('status_code' => 202, 'message' => 'Deleted Successfully', "redirect_url" => url('admin/genre'));
+        }else{
+            return redirect('admin/genre')->withErrors(['err' => ['Somethinng went wrong']], 'admin/genre');}
     }
 }

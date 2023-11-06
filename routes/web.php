@@ -30,6 +30,10 @@ Route::group(['prefix' => '/admin', 'middleware' => 'adminAuth'], function(){
     Route::get('/dashboard',[ AdminDashboard::class, 'index']);
     Route::get('/genre',[ GenreController::class, 'index'])->name('genre');
     Route::get('/add-genre', [GenreController::class, 'create'])->name('add-genre');
+    Route::post('/storegenre', [GenreController::class, 'storeGenre'])->name('store-genre');
+    Route::get('/deletegenre/{genre_id}', [GenreController::class, 'deleteGenre'])->name('delete-genre');
+    Route::get('/editgenre/{genre_id}', [GenreController::class, 'editGenre'])->name('edit-genre');
+
 });
 
 //User Routes
